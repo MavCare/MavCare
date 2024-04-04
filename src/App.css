@@ -1,0 +1,21 @@
+.App {
+  display: flexbox;
+  min-width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+.navbar {
+  min-width: 100%;
+  margin: 0px;
+}
+
+.App .login {
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+
