@@ -1,49 +1,27 @@
 import './App.css';
-import React, {useEffect, useState} from 'react';
+import React, {createContext, useEffect, useState} from 'react';
 import {Nav,Navbar,Container,Row,Col} from 'react-bootstrap';
-import {BrowserRouter as Router,Routes,Route,Link,Navigate} from 'react-router-dom';
+import {BrowserRouter as Router,Routes,Route,Switch,Redirect,Link,Navigate, useNavigate} from 'react-router-dom';
 import {About,Contact} from './Components/Info/Info';
 import {NavBar, Home} from './Components/Home/Home';
 import { Register,LogIn,LogOut, ResetPassword } from './Components/User/User';
 import {CheckIn,CheckOut,SetClean,Add,Delete} from './Components/Update/Update';
+import {getRoom} from './DB/DB.js';
 import logo from './Components/images/logo.png'
 
-var userID;
-var name;
-
-export const Heading = () => {
-  return (
-    <Container>
-      <Row className="heading">
-        <Col className="app-name"><h1>MavCare</h1></Col>
-        <Col className="logo"><img src={logo}/></Col>
-      </Row>      
-    </Container>
-  )
-}
-
 function App() {
-  const [loginPage, setLoginPage] = useState();
+  //const [room, setRoom] = useState();
   useEffect(() => {
-    if(localStorage.getItem("User") === null) {
-      setLoginPage(true);
-    } else {
-      setLoginPage(false);
-    }
-    var url = "http://localhost:8181/JavaAPI/rest/login/user1@site.com/password1/*/*";
-    //fetch(url, {mode: 'no-cors'}).then(user => user.json()).then(data => console.log(data));
-  },[setLoginPage]);
+    getRoom().then((room) => {
+      localStorage.setItem("Room",room);
+    })
+  });
 
   return (
     <Router>
     <div>
       <Container className="App">  
         <NavBar className="navbar"/>
-          <Row className="login">
-            <Col >
-          {loginPage && (<Navigate to="/login"/>)}
-          </Col>
-          </Row>
       </Container> 
     <div>
     <Routes>

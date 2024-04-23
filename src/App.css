@@ -3,7 +3,7 @@
   min-width: 100%;
   justify-content: center;
   align-items: center;
-  margin: auto;
+  margin: 0;
 }
 
 .navbar {
@@ -11,10 +11,6 @@
   margin: 0px;
 }
 
-.App .login {
-  justify-content: center;
-  align-items: center;
-}
 
 
 

@@ -6,11 +6,11 @@
 
 .navbar {
     min-width: 100%;
-    margin: auto;
+    margin: 0;
 }
 
 .itemID {
-    max-width: 1px;
+    min-width: 1.5px;
 }
 
 .itemType {
@@ -30,5 +30,9 @@
 }
 
 .nav_user {
-    
+    margin-right: auto;
+}
+
+.nav_room {
+    margin-right: 0px;
 }

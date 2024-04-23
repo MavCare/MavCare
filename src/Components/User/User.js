@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useHistory} from 'react';
 import {BrowserRouter,Routes,Route,Link,Navigate, useNavigate} from 'react-router-dom';
-import { FaUser,FaLock } from "react-icons/fa";
+import { FaUser,FaLock, FaLessThanEqual } from "react-icons/fa";
 import './User.css';
-import { login, register, resetPass } from '../../DB/DB.js';
+import { login, register, resetPass, getScannedUser, getScannedItems } from '../../DB/DB.js';
 import {NavBar, Home} from '../Home/Home.js';
 
 export const Register = () => {
@@ -12,16 +12,22 @@ export const Register = () => {
     const [password, setPassword] = useState('');
     const [err, setErr] = useState(false);
 
+    var admin = "0";
+    var epc = "*";
+
     var errMessage = "unable to create account";
+
+    const navigate = useNavigate();
 
     const submitReg = (event) => {
         event.preventDefault();
-        register(username.trim(), password, fname.trim(), lname.trim()).then(user => {
+        register(username.trim(), password, fname.trim(), lname.trim(), epc, admin).then(user => {
             if(user === "email already in use.") {
                 setErr(true);
             } else {
                 localStorage.setItem("User",user);
-                {<Navigate to="/"/>};
+                navigate("/");
+                window.location.reload();
             }
         });
     }
@@ -63,8 +69,6 @@ export const Register = () => {
             </div>
             <div className="error-message">{err && errMessage}</div>
             </form>
-            <div>
-            </div>
         </div>
     )
 }
@@ -74,6 +78,17 @@ export const LogIn = () => {
     const [password, setPassword] = useState('');
     const [err, setErr] = useState(false);
     var errMessage = "invalid login credentials";
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        getScannedUser().then(user => {
+            if(user !== "no user scanned") {
+                localStorage.setItem("User",user);
+                navigate("/");
+                window.location.reload();
+            }
+        })
+    },[navigate]);
     
     const submitLogin = (event) => {
         event.preventDefault();
@@ -82,8 +97,10 @@ export const LogIn = () => {
                 setErr(true);
             } else {
                 localStorage.setItem("User",user);
-                {<Navigate to="/"/>};
+                navigate("/");
             }
+        }).then(() => {
+            window.location.reload();
         });
     }
 
@@ -93,14 +110,6 @@ export const LogIn = () => {
 
     const setPass = (event) => {
         setPassword(event.target.value);
-    }
-
-    const toRegister = (event) => {
-        return <Navigate to="/register"/>;
-    }
-
-    const toPassReset = (event) => {
-        return <Navigate to="/reset-pass"/>;
     }
 
     return (
@@ -124,19 +133,25 @@ export const LogIn = () => {
             </div>
             <div className="error-message">{err && errMessage}</div>
             </form>
-            <div>
-            </div>
         </div>
     )
 }
 
 export const LogOut = () => {
+    const navigate = useNavigate();
+    useEffect(() => {
+        if(localStorage.getItem("User") === null) {
+          navigate("/login");
+          window.location.reload();
+        } 
+    },[]);
     useEffect(() => {
         localStorage.removeItem("User");
+        window.location.reload();
+        navigate("/login");
     },[])
     return (
         <div>
-            <Navigate to="/login"/>
         </div>
     )
 }
@@ -145,18 +160,24 @@ export const ResetPassword = () => {
     const [username, setUsername] = useState('');
     const [oldPassword, setOldPass] = useState('');
     const [newPassword, setNewPass] = useState('');
-    var errMessage = "";
+    const [err, setErr] = useState(false);
+    var errMessage = "invalid username and current password";
 
-    const submitPassChange = (event) => {
+    const navigate = useNavigate();
+
+    const submitReset = (event) => {
         event.preventDefault();
         login(username.trim(), oldPassword).then(user => {
             if(user === "no user found") {
-                errMessage = user;
+                setErr(true);
             } 
             else {
                 resetPass(username.trim(), newPassword).then(user => {
                     localStorage.setItem("User", user);
-                });
+                    navigate("/");
+                }).then(() => {
+                    window.location.reload();
+                });;
             }
         })          
     }
@@ -172,8 +193,27 @@ export const ResetPassword = () => {
     }
 
     return (
-        <div>
-            <h2>Reset Password Page</h2>
+        <div className="login-box">
+            <form action="" onSubmit={submitReset}>
+            <h1>Reset Password</h1>
+            <div className="user-input">
+                <input type="email" value={username} onChange={setUser} placeholder="Username/Email" required/>
+                <FaUser className="icon"/>
+            </div>
+            <div className="user-input">
+                <input type="password" value={oldPassword} onChange={setOld} placeholder="Current Password" required/>
+                <FaLock className="icon"/>
+            </div>
+            <div className="user-input">
+                <input type="password" value={newPassword} onChange={setNew} placeholder="New Password" required/>
+                <FaLock className="icon"/>
+            </div>
+            <button type="submit">Reset Password</button>
+            <div className="register-link">
+                <p>Back to <Link to="/login">login</Link> or <Link to="/register">register</Link></p>
+            </div>
+            <div className="error-message">{err && errMessage}</div>
+            </form>
         </div>
     )
 }
