@@ -61,6 +61,21 @@ export async function getAllItems() {
     return await getJson(url);
 }
 
+export async function getMyItems(userID) {
+    var url = "my-items/" + userID;
+    return await getJson(url);
+}
+
+export async function getAllActivity() {
+    var url = "all-activity";
+    return await getJson(url);
+}
+
+export async function getMyActivity(userID) {
+    var url = "my-activity/" + userID;
+    return await getJson(url);
+}
+
 export async function getScannedItems() {
     var url = "scanned-items";
     return await getJson(url);
@@ -104,26 +119,29 @@ export async function setClean(itemIDs, roomID) {
     return await setJson(url, JSON.stringify(json));
 }
 
-export async function addItems(items, roomID) {
+export async function addItems(items, roomID, adminID) {
     const json = {
         "Items": items,
-        "RoomID": roomID
+        "RoomID": roomID,
+        "AdminID": adminID
     };
     var url = "add-item"
     return await setJson(url, JSON.stringify(json));
 }
 
-export async function deleteItems(itemIDs) {
+export async function deleteItems(itemIDs, adminID) {
     const json = {
-        "ItemIDs": itemIDs
+        "ItemIDs": itemIDs,
+        "AdminID": adminID
     }
     var url = "delete-item";
     return await setJson(url, JSON.stringify(json));
 }
 
-export async function undeleteItem(itemID) {
+export async function undeleteItem(itemID, adminID) {
     const json = {
-        "ItemID": itemID
+        "ItemID": itemID,
+        "AdminID": adminID
     }
     var url = "undelete-item";
     return await setJson(url, JSON.stringify(json));
@@ -138,4 +156,75 @@ export async function getRooms() {
     var url = "get-rooms";
     return await getJson(url);
 }
+
+export async function addRooms(rooms, adminID) {
+    const json = {
+        "Rooms": rooms,
+        "AdminID": adminID
+    };
+    var url = "add-room"
+    return await setJson(url, JSON.stringify(json));
+}
+
+export async function deleteRooms(roomIDs, adminID) {
+    const json = {
+        "RoomIDs": roomIDs,
+        "AdminID": adminID
+    }
+    var url = "delete-room";
+    return await setJson(url, JSON.stringify(json));
+}
+
+export async function undeleteRoom(roomID, adminID) {
+    const json = {
+        "RoomID": roomID,
+        "AdminID": adminID
+    }
+    var url = "undelete-room";
+    return await setJson(url, JSON.stringify(json));
+}
+
+export async function getItemTypes() {
+    var url = "item-types";
+    return await getJson(url);
+}
+
+export async function getMissingItems() {
+    var url = "missing-items";
+    return await getJson(url);
+}
+
+export async function getUsageActivity() {
+    var url = "usage-activity";
+    return await getJson(url);
+}
+
+export async function getAdminActivity() {
+    var url = "admin-activity";
+    return await getJson(url);
+}
+
+export async function getUsers() {
+    var url = "all-users";
+    return await getJson(url);
+}
+
+export async function deleteUsers(userIDs, adminID) {
+    const json = {
+        "UserIDs": userIDs,
+        "AdminID": adminID
+    }
+    var url = "delete-user";
+    return await setJson(url, JSON.stringify(json));
+}
+
+export async function undeleteUser(userID, adminID) {
+    const json = {
+        "UserID": userID,
+        "AdminID": adminID
+    }
+    var url = "undelete-user";
+    return await setJson(url, JSON.stringify(json));
+}
+
 

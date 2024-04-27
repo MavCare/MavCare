@@ -1,12 +1,26 @@
+body{
+    min-width:100%;
+}
 .logo {
     width: 40px;
     height: 40px;
     margin-left: 7px;
 }
 
+#nav_container {
+}
+
 .navbar {
     min-width: 100%;
     margin: 0;
+    position: absolute;
+    top: 0;
+    z-index: 1000;
+    margin-bottom: 0; 
+}
+
+#nav_items {
+    position: fixed;
 }
 
 .itemID {
@@ -17,8 +31,9 @@
     min-width: 100px;
 }
 
-.room {
-
+#room {
+    left: 180px;
+    position: fixed;
 }
 
 .status {
@@ -30,9 +45,9 @@
 }
 
 .nav_user {
-    margin-right: auto;
+    right: 12px;
+    position: fixed;
 }
 
 .nav_room {
-    margin-right: 0px;
 }

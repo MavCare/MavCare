@@ -81,14 +81,18 @@ export const LogIn = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        getScannedUser().then(user => {
-            if(user !== "no user scanned") {
-                localStorage.setItem("User",user);
-                navigate("/");
-                window.location.reload();
-            }
-        })
-    },[navigate]);
+        const interval = setInterval(() => {
+            getScannedUser().then(user => {
+                if(user !== "no user scanned") {
+                    localStorage.setItem("User",user);
+                    navigate("/");
+                    window.location.reload();
+                }
+            })
+        },2000)
+
+        return () => clearInterval(interval);
+    });
     
     const submitLogin = (event) => {
         event.preventDefault();
